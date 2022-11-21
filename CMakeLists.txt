@@ -23,10 +23,7 @@ FetchContent_Declare(json
 FetchContent_MakeAvailable(json)
 
 # Add Header List
-#set(HEADER_LIST ${PROJECT_SOURCE_DIR}/include/compensatorThread.hpp
-#	        ${PROJECT_SOURCE_DIR}/include/strapdownThread.hpp
-#		${PROJECT_SOURCE_DIR}/include/kalmanFilterThread.hpp
-#		${PROJECT_SOURCE_DIR}/include/util/jsonUtilities.hpp)
+set(HEADER_LIST ${PROJECT_SOURCE_DIR}/include/util/jsonUtilities.hpp)
 
 # Include Directories
 include_directories(${PROJECT_SOURCE_DIR}/include)
@@ -47,21 +44,21 @@ target_link_libraries(
 #					    PUBLIC ${EIGEN_INSTALL_PATH})
 
 # Unit Testing Build
-#enable_testing()
-#add_executable( test_gps_ins ${PROJECT_SOURCE_DIR}/test/testMain.cpp
-#	                     ${PROJECT_SOURCE_DIR}/test/jsonUtilitiesTest.cpp 
-#			     ${PROJECT_SOURCE_DIR}/src/util/jsonUtilities.cpp ${HEADER_LIST})
-#target_link_libraries(
-#  test_gps_ins
-#  GTest::gtest_main
-#  navigation
-#  nlohmann_json::nlohmann_json
-#)
+enable_testing()
+add_executable( test_sensor_sim ${PROJECT_SOURCE_DIR}/test/testMain.cpp
+        	                ${PROJECT_SOURCE_DIR}/test/jsonUtilitiesTest.cpp 
+ 			        ${PROJECT_SOURCE_DIR}/src/util/jsonUtilities.cpp ${HEADER_LIST})
+target_link_libraries(
+  test_sensor_sim
+  GTest::gtest_main
+  navigation
+  nlohmann_json::nlohmann_json
+)
 
 # Target Include Directories
-#target_include_directories(test_gps_ins PUBLIC ${PROJECT_SOURCE_DIR}/include
-#                                        PUBLIC ${PROJECT_SOURCE_DIR}/include/util
-#                                        PUBLIC ${EIGEN_INSTALL_PATH})
+target_include_directories(test_sensor_sim PUBLIC ${PROJECT_SOURCE_DIR}/include
+                                           PUBLIC ${PROJECT_SOURCE_DIR}/include/util
+                                           PUBLIC ${EIGEN_INSTALL_PATH})
 
-#include(GoogleTest)
-#gtest_discover_tests(test_gps_ins)
+include(GoogleTest)
+gtest_discover_tests(test_sensor_sim)

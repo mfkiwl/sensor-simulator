@@ -1,0 +1,34 @@
+{
+    "imu":
+        {
+	    "use_imu" : 1,
+            "rate" : 100,
+            "errors":
+                {
+                    "accel_bias_repeatability_rms_mg" : 0.7,
+		    "accel_bias_instability_rms_mg" : 0.04,
+		    "accel_sf_sigma_ppm" : 500,
+		    "accel_mis_sigma_urad" : 0.2,
+		    "accel_vrw_m_s_sqrtHr" : 0.1,
+		    "gyro_bias_repeatability_rms_deg_hr" : 15,
+		    "gyro_bias_instability_rms_deg_hr" : 5.0,
+		    "gyro_sf_sigma_ppm" : 1000,
+		    "gyro_mis_sigma_urad" : 0.2,
+		    "gyro_arw_deg_sqrtHr" : 0.3 
+	        }		
+	},
+    "loosely-coupled-gps":
+        {
+            "use_gps" : 1,
+	    "rate" : 1,
+	    "errors":
+	        {
+                    "level_pos_sigma_m" : 3,
+		    "vertical_pos_sigma_m" : 5
+		}
+	},
+    "trajectory":
+        {
+            "file" : "trajectories/sample_trajectory.csv"
+	}
+}

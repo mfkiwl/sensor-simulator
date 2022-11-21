@@ -35,16 +35,16 @@ bool jsonUtilities::parseSensorConfig(const std::string fileName,
     }
     imu.rate = imuData.value("rate", 1.0);
     json imuErrors = imuData["errors"];
-    imu.accel_bias_repeatability = imuErrors.value["accel_bias_repeatability_rms_mg", 0.0];
-    imu.accel_bias_instability = imuErrors.value["accel_bias_instability_rms_mg", 0.0]; 
-    imu.accel_sf = imuErrors.value["accel_sf_sigma_ppm", 0.0];      
-    imu.accel_mis = imuErrors.value["accel_mis_sigma_urad", 0.0];       
-    imu.accel_vrw = imuErrors.value["accel_vrw_m_s_sqrtHr", 0.0];           
-    imu.gyro_bias_repeatability = imuErrors.value["gyro_bias_repeatability_rms_mg", 0.0];
-    imu.gyro_bias_instability = imuErrors.value["gyro_bias_instability_rms_mg", 0.0]; 
-    imu.gyro_sf = imuErrors.value["gyro_sf_sigma_ppm", 0.0];     
-    imu.gyro_mis = imuErrors.value["gyro_mis_sigma_urad", 0.0];         
-    imu.gyro_arw = imuErrors.value["gyro_arw_deg_sqrtHr", 0.0];
+    imu.accel_bias_repeatability = imuErrors.value("accel_bias_repeatability_rms_mg", 0.0);
+    imu.accel_bias_instability = imuErrors.value("accel_bias_instability_rms_mg", 0.0); 
+    imu.accel_sf = imuErrors.value("accel_sf_sigma_ppm", 0.0);      
+    imu.accel_mis = imuErrors.value("accel_mis_sigma_urad", 0.0);       
+    imu.accel_vrw = imuErrors.value("accel_vrw_m_s_sqrtHr", 0.0);           
+    imu.gyro_bias_repeatability = imuErrors.value("gyro_bias_repeatability_rms_mg", 0.0);
+    imu.gyro_bias_instability = imuErrors.value("gyro_bias_instability_rms_mg", 0.0); 
+    imu.gyro_sf = imuErrors.value("gyro_sf_sigma_ppm", 0.0);     
+    imu.gyro_mis = imuErrors.value("gyro_mis_sigma_urad", 0.0);         
+    imu.gyro_arw = imuErrors.value("gyro_arw_deg_sqrtHr", 0.0);
 
     // Get Loosely Coupled GPS
     json lcGps = config["loosely-coupled-gps"];
@@ -64,7 +64,7 @@ bool jsonUtilities::parseSensorConfig(const std::string fileName,
     sensorConfig.imu = imu;
     sensorConfig.looselyCoupledGps = looselyCoupledGps;
     json traj = config["trajectory"];
-    sensorConfig.TrajectoryFile = traj.value("file","");
+    sensorConfig.trajectoryFile = traj.value("file","");
 
     // Successful Return
     return true;
