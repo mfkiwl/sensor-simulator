@@ -17,13 +17,14 @@
 		    "gyro_arw_deg_sqrtHr" : 0.3 
 	        }		
 	},
-    "gps":
+    "loosely-coupled-gps":
         {
             "use_gps" : 1,
 	    "rate" : 1,
 	    "errors":
 	        {
-                    "pos_sigma_m" : 3
+                    "level_pos_sigma_m" : 3,
+		    "vertical_pos_sigma_m" : 5
 		}
 	},
     "trajectory":
