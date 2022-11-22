@@ -15,6 +15,10 @@
 #include <thread>
 #include <queue>
 
+// Sensor Sim Include Headers
+#include "imuSensor.hpp"
+#include "jsonUtilities.hpp"
+
 // ROS2 Include Headers
 #include "rclcpp/rclcpp.hpp"
 
@@ -26,20 +30,37 @@ int main(int argc, char **argv) {
 
     // Unpack Inputs Arguments
     if (argc != 2) {
-        std::cout << "[main] Invalid arguments - expected ./SensorSim <master config>" << std::endl;
+        std::cout << "[main] Invalid arguments - expected ./SensorSim <sensor config>" << std::endl;
         return 1;
     } else {
-        std::cout << "[main] Master Configuration File: " << argv[1] << std::endl;
+        std::cout << "[main] Sensor Configuration File: " << argv[1] << std::endl;
     }
-    const std::string masterConfig = argv[1];
+    const std::string sensorConfig = argv[1];
 
-    // Verify Master Configuration File Exists
-    std::ifstream mc;
-    mc.open(masterConfig);
-    if (!mc) {
-        std::cout << "[main] Master Configuration File Specified does not exist" << std::endl;
+    // Verify Sensor Configuration File Exists
+    std::ifstream sc;
+    sc.open(sensorConfig);
+    if (!sc) {
+        std::cout << "[main] Sensor Configuration File Specified does not exist" << std::endl;
         return 1;
-    } 
+    }
+
+    // Parse Sensor Configuration File
+    jsonUtilities ju;
+    sensorSimData_t config;
+    if (!ju.parseSensorConfig(sensorConfig, config)) {
+        std::cout << "[main] Failed to parse Sensor Configuration File" << std::endl;
+        return 1;
+    }
+
+    // Generate IMU Sensor Measurement History
+    imuSensor imu_;
+    if (config.imu.useImu) {
+        std::cout << "[main] Adding IMU Sensor..." << std::endl;
+
+    }
+
+    // Generate Loosely-Coupled GPS Sensor sMeasurement History
 
     // Create ROS2 IMU Sensor Publisher
 

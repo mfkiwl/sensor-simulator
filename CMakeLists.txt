@@ -23,13 +23,17 @@ FetchContent_Declare(json
 FetchContent_MakeAvailable(json)
 
 # Add Header List
-set(HEADER_LIST ${PROJECT_SOURCE_DIR}/include/util/jsonUtilities.hpp)
+set(HEADER_LIST ${PROJECT_SOURCE_DIR}/include/imuSensor.hpp
+	        ${PROJECT_SOURCE_DIR}/include/util/jsonUtilities.hpp)
 
 # Include Directories
-include_directories(${PROJECT_SOURCE_DIR}/include)
+include_directories(${PROJECT_SOURCE_DIR}/include
+	            ${PROJECT_SOURCE_DIR}/include/util)
 
 # Add Executable
-add_executable(SensorSim ${PROJECT_SOURCE_DIR}/src/main.cpp)
+add_executable(SensorSim ${PROJECT_SOURCE_DIR}/src/main.cpp
+	                 ${PROJECT_SOURCE_DIR}/src/imuSensor.cpp
+			 ${PROJECT_SOURCE_DIR}/src/util/jsonUtilities.cpp ${HEADER_LIST})
 ament_target_dependencies(SensorSim rclcpp)
 
 # Link Libraries
@@ -39,9 +43,9 @@ target_link_libraries(
     nlohmann_json::nlohmann_json)
 
 # Target Include Directories
-#target_include_directories(GpsInsNavigation PUBLIC ${PROJECT_SOURCE_DIR}/include
-#	                                    PUBLIC ${PROJECT_SOURCE_DIR}/include/util}
-#					    PUBLIC ${EIGEN_INSTALL_PATH})
+target_include_directories(SensorSim PUBLIC ${PROJECT_SOURCE_DIR}/include
+	                             PUBLIC ${PROJECT_SOURCE_DIR}/include/util}
+				     PUBLIC ${EIGEN_INSTALL_PATH})
 
 # Unit Testing Build
 enable_testing()
