@@ -40,8 +40,8 @@ bool jsonUtilities::parseSensorConfig(const std::string fileName,
     imu.accel_sf = imuErrors.value("accel_sf_sigma_ppm", 0.0);      
     imu.accel_mis = imuErrors.value("accel_mis_sigma_urad", 0.0);       
     imu.accel_vrw = imuErrors.value("accel_vrw_m_s_sqrtHr", 0.0);           
-    imu.gyro_bias_repeatability = imuErrors.value("gyro_bias_repeatability_rms_mg", 0.0);
-    imu.gyro_bias_instability = imuErrors.value("gyro_bias_instability_rms_mg", 0.0); 
+    imu.gyro_bias_repeatability = imuErrors.value("gyro_bias_repeatability_rms_deg_hr", 0.0);
+    imu.gyro_bias_instability = imuErrors.value("gyro_bias_instability_rms_deg_hr", 0.0); 
     imu.gyro_sf = imuErrors.value("gyro_sf_sigma_ppm", 0.0);     
     imu.gyro_mis = imuErrors.value("gyro_mis_sigma_urad", 0.0);         
     imu.gyro_arw = imuErrors.value("gyro_arw_deg_sqrtHr", 0.0);
