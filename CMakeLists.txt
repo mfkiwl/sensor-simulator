@@ -24,6 +24,7 @@ FetchContent_MakeAvailable(json)
 
 # Add Header List
 set(HEADER_LIST ${PROJECT_SOURCE_DIR}/include/imuSensor.hpp
+	        ${PROJECT_SOURCE_DIR}/include/util/trajectory.hpp
 	        ${PROJECT_SOURCE_DIR}/include/util/jsonUtilities.hpp)
 
 # Include Directories
@@ -33,6 +34,7 @@ include_directories(${PROJECT_SOURCE_DIR}/include
 # Add Executable
 add_executable(SensorSim ${PROJECT_SOURCE_DIR}/src/main.cpp
 	                 ${PROJECT_SOURCE_DIR}/src/imuSensor.cpp
+			 ${PROJECT_SOURCE_DIR}/src/util/trajectory.cpp
 			 ${PROJECT_SOURCE_DIR}/src/util/jsonUtilities.cpp ${HEADER_LIST})
 ament_target_dependencies(SensorSim rclcpp)
 

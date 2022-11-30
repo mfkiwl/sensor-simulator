@@ -4,8 +4,8 @@
 //                                                                                                  // 
 // Author:      Parker Barrett                                                                      //
 // Overview:    The main Sensor Simulator executable. This top level executable parses the          //
-//              sensor simulation configuration set by the users creates the ROS2 publisher that    //
-//              output the simulated sensor data.                                                   //                                                                         //           
+//              sensor simulation configuration set by the users and creates the ROS2 publishers    //
+//              that outputs the simulated sensor data.                                             //                                                                         //           
 //                                                                                                  //
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -17,6 +17,7 @@
 
 // Sensor Sim Include Headers
 #include "imuSensor.hpp"
+#include "trajectory.hpp"
 #include "jsonUtilities.hpp"
 
 // ROS2 Include Headers
@@ -53,6 +54,13 @@ int main(int argc, char **argv) {
         return 1;
     }
 
+    // Parse NED Trajectory CSV
+    trajectory traj;
+    if (!traj.parseNedTrajectory(config.trajectoryFile)) {
+        std::cout << "[main] Failed to parse Trajectory File" << std::endl;
+        return 1;
+    }
+
     // Generate IMU Sensor Measurement History
     imuSensor imu_;
     if (config.imu.useImu) {
@@ -60,7 +68,7 @@ int main(int argc, char **argv) {
 
     }
 
-    // Generate Loosely-Coupled GPS Sensor sMeasurement History
+    // Generate Loosely-Coupled GPS Sensor Measurement History
 
     // Create ROS2 IMU Sensor Publisher
 
