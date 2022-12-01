@@ -52,7 +52,9 @@ target_include_directories(SensorSim PUBLIC ${PROJECT_SOURCE_DIR}/include
 # Unit Testing Build
 enable_testing()
 add_executable( test_sensor_sim ${PROJECT_SOURCE_DIR}/test/testMain.cpp
+	                        ${PROJECT_SOURCE_DIR}/test/trajectoryTest.cpp
         	                ${PROJECT_SOURCE_DIR}/test/jsonUtilitiesTest.cpp 
+				${PROJECT_SOURCE_DIR}/src/util/trajectory.cpp
  			        ${PROJECT_SOURCE_DIR}/src/util/jsonUtilities.cpp ${HEADER_LIST})
 target_link_libraries(
   test_sensor_sim

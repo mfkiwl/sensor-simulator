@@ -46,7 +46,7 @@ TEST(ParseConfig, Master)
     double rateLCGpsTruth = 1.0; 
     double level_pos_sigmaTruth = 3.0;
     double vertical_pos_sigmaTruth = 5.0;
-    std::string trajectoryFileTruth = "trajectories/sample_trajectory.csv"; 
+    std::string trajectoryFileTruth = "/home/parkerb7/sensor-simulator/config/trajectories/sample_trajectory.csv"; 
 
     // Check Results - IMU
     EXPECT_EQ(useImuTruth, config.imu.useImu);
