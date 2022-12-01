@@ -17,6 +17,7 @@
 
 // Sensor Sim Include Headers
 #include "imuSensor.hpp"
+#include "looselyCoupledGpsSensor.hpp"
 #include "trajectory.hpp"
 #include "jsonUtilities.hpp"
 
@@ -69,6 +70,11 @@ int main(int argc, char **argv) {
     }
 
     // Generate Loosely-Coupled GPS Sensor Measurement History
+    looselyCoupledGpsSensor lcGps_;
+    if (config.looselyCoupledGps.useLooselyCoupledGps) {
+        std::cout << "[main] Adding Loosely Coupled GPS Sensor..." << std::endl;
+
+    }
 
     // Create ROS2 IMU Sensor Publisher
 
