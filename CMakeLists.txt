@@ -16,6 +16,10 @@ include(FetchContent)
 FetchContent_Declare(NavFuse
 	GIT_REPOSITORY git@github.com:ParkerBarrett959/NavFuse
 	GIT_TAG main)
+FetchContent_Declare(NavROS
+	GIT_REPOSITORY git@github.com:ParkerBarrett959/NavROS
+	GIT_TAG main)
+FetchContent_MakeAvailable(NavROS)
 FetchContent_MakeAvailable(NavFuse)
 FetchContent_Declare(json
         GIT_REPOSITORY git@github.com:nlohmann/json
