@@ -18,11 +18,28 @@
 // Sensor Sim Include Headers
 #include "imuSensor.hpp"
 #include "looselyCoupledGpsSensor.hpp"
-#include "trajectory.hpp"
-#include "jsonUtilities.hpp"
+#include "util/trajectory.hpp"
+#include "util/jsonUtilities.hpp"
 
 // ROS2 Include Headers
 #include "rclcpp/rclcpp.hpp"
+
+// NavROS Include Headers
+#include "navROS/Looselycoupledgps.h"
+
+// IMU Sensor Publisher
+/*
+// Loosely Coupled GPS Sensor Publisher
+class GpsPublisher : public rclcpp::Node {
+
+    // Public 
+    public:
+        GpsPublisher() : Node("loosely_coupled_gps"), count_(0) {
+            publisher_ = this->create_publisher<nav_interfaces::>
+        }
+
+    // Private
+};*/
 
 // Main Sensor Simulation Function
 int main(int argc, char **argv) {
