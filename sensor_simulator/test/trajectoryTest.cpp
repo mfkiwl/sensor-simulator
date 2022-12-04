@@ -9,8 +9,8 @@
 
 // Include Statements
 #include "gtest/gtest.h"
-#include "trajectory.hpp"
-#include "jsonUtilities.hpp"
+#include "util/trajectory.hpp"
+#include "util/jsonUtilities.hpp"
 #include <Eigen/Dense>
 #include <string>
 

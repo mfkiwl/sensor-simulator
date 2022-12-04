@@ -11,7 +11,7 @@
 // Include Headers
 #include <iostream>
 #include <thread>
-#include "jsonUtilities.hpp"
+#include "util/jsonUtilities.hpp"
 
 // Parse Master Configuration File
 bool jsonUtilities::parseSensorConfig(const std::string fileName,

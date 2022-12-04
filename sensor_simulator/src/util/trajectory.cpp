@@ -11,7 +11,7 @@
 // Include Headers
 #include <iostream>
 #include <thread>
-#include "trajectory.hpp"
+#include "util/trajectory.hpp"
 
 // Initialize IMU Model
 bool trajectory::parseNedTrajectory(const std::string nedTrajFile) {

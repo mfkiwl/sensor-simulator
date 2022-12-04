@@ -9,7 +9,7 @@
 
 // Include Statements
 #include "gtest/gtest.h"
-#include "jsonUtilities.hpp"
+#include "util/jsonUtilities.hpp"
 #include <Eigen/Dense>
 #include <string>
 

@@ -10,15 +10,16 @@ find_package(ament_cmake REQUIRED)
 find_package (Eigen3 3.3 REQUIRED NO_MODULE)
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(nav_interfaces REQUIRED)
 include_directories(${EIGEN3_INCLUDE_DIR})
 include(FetchContent)
 FetchContent_Declare(NavFuse
         GIT_REPOSITORY git@github.com:ParkerBarrett959/NavFuse
         GIT_TAG main)
-FetchContent_Declare(NavROS
-        GIT_REPOSITORY git@github.com:ParkerBarrett959/NavROS
-        GIT_TAG main)
-FetchContent_MakeAvailable(NavROS)
+#FetchContent_Declare(nav_interfaces
+#        GIT_REPOSITORY git@github.com:ParkerBarrett959/NavROS
+#        GIT_TAG main)
+#FetchContent_MakeAvailable(nav_interfaces)
 FetchContent_MakeAvailable(NavFuse)
 FetchContent_Declare(json
         GIT_REPOSITORY git@github.com:nlohmann/json
@@ -41,7 +42,7 @@ add_executable(SensorSim ${PROJECT_SOURCE_DIR}/src/main.cpp
                          ${PROJECT_SOURCE_DIR}/src/looselyCoupledGpsSensor.cpp
                          ${PROJECT_SOURCE_DIR}/src/util/trajectory.cpp
                          ${PROJECT_SOURCE_DIR}/src/util/jsonUtilities.cpp ${HEADER_LIST})
-ament_target_dependencies(SensorSim rclcpp)
+		 ament_target_dependencies(SensorSim rclcpp nav_interfaces)
 
 target_link_libraries(
     SensorSim

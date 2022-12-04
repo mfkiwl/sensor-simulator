@@ -25,7 +25,7 @@
 #include "rclcpp/rclcpp.hpp"
 
 // NavROS Include Headers
-#include "navROS/Looselycoupledgps.h"
+#include "nav_interfaces/msg/looselycoupledgps.h"
 
 // IMU Sensor Publisher
 /*
