@@ -29,6 +29,6 @@
 	},
     "trajectory":
         {
-            "file" : "/home/parkerb7/sensor-simulator/config/trajectories/sample_trajectory.csv"
+            "file" : "/home/parkerb7/temp/src/sensor-simulator/sensor_simulator/config/trajectories/sample_trajectory.csv"
 	}
 }

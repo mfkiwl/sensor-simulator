@@ -25,21 +25,35 @@
 #include "rclcpp/rclcpp.hpp"
 
 // NavROS Include Headers
-#include "nav_interfaces/msg/looselycoupledgps.h"
+#include "nav_interfaces/msg/looselycoupledgps.hpp"
+
+// Timing
+using namespace std::chrono_literals;
 
 // IMU Sensor Publisher
-/*
+
 // Loosely Coupled GPS Sensor Publisher
 class GpsPublisher : public rclcpp::Node {
 
     // Public 
     public:
         GpsPublisher() : Node("loosely_coupled_gps"), count_(0) {
-            publisher_ = this->create_publisher<nav_interfaces::>
+            publisher_ = this->create_publisher<nav_interfaces::msg::Looselycoupledgps>("loosely_coupled_gps", 10);
+	    timer_ = this->create_wall_timer(1000ms, std::bind(&GpsPublisher::timer_callback, this));
         }
 
     // Private
-};*/
+    private:
+	void timer_callback() {
+	    auto message = nav_interfaces::msg::Looselycoupledgps();
+            message.tov = 10;
+	    std::cout << "[GpsPublisher] Publishing GPS Message: Lat = 0, Lon = 0, Alt = 0" << std::endl;
+	    publisher_->publish(message);
+	}
+	rclcpp::TimerBase::SharedPtr timer_;
+	rclcpp::Publisher<nav_interfaces::msg::Looselycoupledgps>::SharedPtr publisher_;
+	size_t count_;
+};
 
 // Main Sensor Simulation Function
 int main(int argc, char **argv) {
@@ -96,6 +110,7 @@ int main(int argc, char **argv) {
     // Create ROS2 IMU Sensor Publisher
 
     // Create ROS2 GPS Sensor Publisher
+    rclcpp::spin(std::make_shared<GpsPublisher>());
 
     // Shutdown ROS2 Node
     rclcpp::shutdown();
