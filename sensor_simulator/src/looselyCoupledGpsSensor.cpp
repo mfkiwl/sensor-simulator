@@ -17,7 +17,10 @@
 // Initialize GPS Sensor Model
 bool looselyCoupledGpsSensor::init(looselyCoupledGpsSensorSimData_t gpsConfig) {
 
-    //
+    // Set Class Variables
+    rate_ = gpsConfig.rate;
+    level_pos_sigma_ = gpsConfig.level_pos_sigma;
+    vertical_pos_sigma_ = gpsConfig.vertical_pos_sigma;
 
     // Successful Return
     return true;
@@ -25,15 +28,15 @@ bool looselyCoupledGpsSensor::init(looselyCoupledGpsSensorSimData_t gpsConfig) {
 }
 
 // Generate GPS Sensor Measurements
-bool looselyCoupledGpsSensor::generateGpsMeasurements(looselyCoupledGpsSensorSimData_t gpsConfig) {
-    
-    // Initialize GPS Model
-    if (!init(gpsConfig)) {
-        std::cout << "[looselyCoupledGpsSensor::generateGpsMeasurements] Failed to initialize Loosely Coupled GPS sensor model" << std::endl;
-        return false;
-    }
+bool looselyCoupledGpsSensor::generateGpsMeasurements(nedTrajSensorSimData_t nedTraj,
+		                                      std::vector<int64_t> gpsTov,
+                                                      std::vector<Eigen::Vector3d> gpsData) {
 
-    // Main Loop to Generate GPS Measurements
+    // Get GPS Time History
+    gpsTov = nedTraj.tov;
+
+    // Get GPS Measurement History
+    gpsData = nedTraj.lla;
 
     // Successful Return
     std::cout << "[looselyCoupledGpsSensor::generateGpsMeasurements] Completed Loosely Coupled GPS Measurement Generation" << std::endl;

@@ -18,10 +18,19 @@ class looselyCoupledGpsSensor {
 
     // Public Class Members/Functions
     public:
+
+	/* @init
+            Inputs:
+                gpsConfig: looselyCoupledGpsSensorSimData_t struct containing GPS model parameters
+            Outputs:
+            Description:
+                Function which initializes the GPS sensor model.
+        */
+        bool init(looselyCoupledGpsSensorSimData_t gpsConfig);
         
         /* @generateGpsMeasurements
             Inputs:
-                gpsConfig: looselyCoupledGpsSensorSimData_t struct containing GPS model parameters
+	        nedTraj: nedTrajSensorSimData_t containing NED truth trajectory
             Outputs:
                 gpsTov: std::vector<int64_t> Vector containing GPS measurement UTC timestamps
                 gpsData: std::vector<Eigen::Vector3d> Vector containing GPS LLA measurements
@@ -29,22 +38,16 @@ class looselyCoupledGpsSensor {
                 Function which takes in the GPS model parameters and trajectory and generates
                 a time history of measurements at the specified rate.
         */
-        bool generateGpsMeasurements(looselyCoupledGpsSensorSimData_t gpsConfig);
+        bool generateGpsMeasurements(nedTrajSensorSimData_t nedTraj,
+			             std::vector<int64_t> gpsTov,
+				     std::vector<Eigen::Vector3d> gpsData);
 
     // Private Class Members/Function
     private:
 
-        /* @init
-            Inputs:
-                gpsConfig: looselyCoupledGpsSensorSimData_t struct containing GPS model parameters
-            Outputs:
-            Description:
-                Function which initializes the GPS sensor model.
-        */
-        bool init(looselyCoupledGpsSensorSimData_t gpsConfig_);
-
-        // GPS Sensor Sim Data
-        looselyCoupledGpsSensorSimData_t gpsConfig_;
+        // GPS Sensor Sim Model Parameters
+	double rate_;
+	double level_pos_sigma_;
+	double vertical_pos_sigma_;
         
-
 };
