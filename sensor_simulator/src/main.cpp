@@ -75,8 +75,13 @@ class GpsPublisher : public rclcpp::Node {
 	    gpsData_.pop();
 
 	    // Publish Message
-	    std::cout << "[GpsPublisher] Publishing GPS Message: tov =  " << message.tov << std::endl;
+	    std::cout << "[GpsPublisher] Publishing GPS Message: " <<
+	        "tov = " << message.tov << ", " <<
+		"lat = " << message.latitude << ", " <<
+		"lon = " << message.longitude << ", " <<
+                "alt = " << message.altitude << std::endl;
 	    publisher_->publish(message);
+
 	}
 
 	// Class Variables
@@ -130,14 +135,12 @@ int main(int argc, char **argv) {
     }
 
     // Generate IMU Sensor Measurement History
-    imuSensor imu_;
     if (config.imu.useImu) {
         std::cout << "[main] Adding IMU Sensor..." << std::endl;
 
     }
 
     // Generate Loosely-Coupled GPS Publisher
-    looselyCoupledGpsSensor lcGps_;
     if (config.looselyCoupledGps.useLooselyCoupledGps) {
         std::cout << "[main] Adding Loosely Coupled GPS Sensor..." << std::endl;
         rclcpp::spin(std::make_shared<GpsPublisher>(config.looselyCoupledGps, traj.nedTraj_));

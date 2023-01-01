@@ -40,8 +40,8 @@ class looselyCoupledGpsSensor {
                 a time history of measurements at the specified rate.
         */
         bool generateGpsMeasurements(nedTrajSensorSimData_t nedTraj,
-			             std::queue<int64_t> gpsTov,
-				     std::queue<Eigen::Vector3d> gpsData);
+			             std::queue<int64_t> &gpsTov,
+				     std::queue<Eigen::Vector3d> &gpsData);
 
     // Private Class Members/Function
     private:
