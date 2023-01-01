@@ -37,22 +37,58 @@ class GpsPublisher : public rclcpp::Node {
 
     // Public 
     public:
-        GpsPublisher() : Node("loosely_coupled_gps"), count_(0) {
+
+	// GPS Publisher Constructor
+        GpsPublisher(looselyCoupledGpsSensorSimData_t sensorData, nedTrajSensorSimData_t nedTraj) : 
+		Node("loosely_coupled_gps"), 
+		count_(0), 
+		sensorData_(sensorData),
+                nedTraj_(nedTraj) {
+	    
+	    // Create GPS Trajectory
+	    lcGps_.init(sensorData_);
+	    lcGps_.generateGpsMeasurements(nedTraj_, gpsTov_, gpsData_);
+
+	    // Create GPS Publisher
             publisher_ = this->create_publisher<nav_interfaces::msg::Looselycoupledgps>("loosely_coupled_gps", 10);
 	    timer_ = this->create_wall_timer(1000ms, std::bind(&GpsPublisher::timer_callback, this));
         }
 
     // Private
     private:
+
+	// Timer Callback
 	void timer_callback() {
+
+	    // Create Message
 	    auto message = nav_interfaces::msg::Looselycoupledgps();
-            message.tov = 10;
-	    std::cout << "[GpsPublisher] Publishing GPS Message: Lat = 0, Lon = 0, Alt = 0" << std::endl;
+
+	    // Fill Time of Validity
+            message.tov = gpsTov_.front();
+	    gpsTov_.pop();
+
+	    // Fill LLA
+	    Eigen::Vector3d lla = gpsData_.front();
+	    message.latitude = lla[0];
+	    message.longitude = lla[1];
+	    message.altitude = lla[2];
+	    gpsData_.pop();
+
+	    // Publish Message
+	    std::cout << "[GpsPublisher] Publishing GPS Message: Lat = " << lla[0] << ", Lon = " << lla[1] << ", Alt = " << lla[2] << std::endl;
 	    publisher_->publish(message);
 	}
+
+	// Class Variables
 	rclcpp::TimerBase::SharedPtr timer_;
 	rclcpp::Publisher<nav_interfaces::msg::Looselycoupledgps>::SharedPtr publisher_;
 	size_t count_;
+	looselyCoupledGpsSensor lcGps_;
+	looselyCoupledGpsSensorSimData_t sensorData_;
+	nedTrajSensorSimData_t nedTraj_;
+	std::queue<int64_t> gpsTov_;
+	std::queue<Eigen::Vector3d> gpsData_;
+
 };
 
 // Main Sensor Simulation Function
@@ -100,17 +136,14 @@ int main(int argc, char **argv) {
 
     }
 
-    // Generate Loosely-Coupled GPS Sensor Measurement History
+    // Generate Loosely-Coupled GPS Publisher
     looselyCoupledGpsSensor lcGps_;
     if (config.looselyCoupledGps.useLooselyCoupledGps) {
         std::cout << "[main] Adding Loosely Coupled GPS Sensor..." << std::endl;
-
+        rclcpp::spin(std::make_shared<GpsPublisher>(config.looselyCoupledGps, traj.nedTraj_));
     }
 
     // Create ROS2 IMU Sensor Publisher
-
-    // Create ROS2 GPS Sensor Publisher
-    rclcpp::spin(std::make_shared<GpsPublisher>());
 
     // Shutdown ROS2 Node
     rclcpp::shutdown();

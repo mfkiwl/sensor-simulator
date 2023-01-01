@@ -27,6 +27,9 @@ class trajectory {
 
     // Public Class Members/Functions
     public:
+
+	// NED Trajectory Data
+        nedTrajSensorSimData_t nedTraj_;
         
         /* @parseNedTrajectory
             Inputs:
@@ -40,8 +43,5 @@ class trajectory {
 
     // Private Class Members/Function
     private:
-
-        // NED Trajectory Data
-        nedTrajSensorSimData_t nedTraj_;
 
 };

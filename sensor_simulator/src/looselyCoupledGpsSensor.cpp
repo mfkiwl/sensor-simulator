@@ -29,14 +29,14 @@ bool looselyCoupledGpsSensor::init(looselyCoupledGpsSensorSimData_t gpsConfig) {
 
 // Generate GPS Sensor Measurements
 bool looselyCoupledGpsSensor::generateGpsMeasurements(nedTrajSensorSimData_t nedTraj,
-		                                      std::vector<int64_t> gpsTov,
-                                                      std::vector<Eigen::Vector3d> gpsData) {
+		                                      std::queue<int64_t> gpsTov,
+                                                      std::queue<Eigen::Vector3d> gpsData) {
 
-    // Get GPS Time History
-    gpsTov = nedTraj.tov;
-
-    // Get GPS Measurement History
-    gpsData = nedTraj.lla;
+    // Get GPS Measurement Time History
+    for (int ii = 0; ii < nedTraj.tov.size(); ii++) {
+        gpsTov.push(nedTraj.tov[ii]);
+	gpsData.push(nedTraj.lla[ii]);
+    }
 
     // Successful Return
     std::cout << "[looselyCoupledGpsSensor::generateGpsMeasurements] Completed Loosely Coupled GPS Measurement Generation" << std::endl;

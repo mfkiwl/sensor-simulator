@@ -10,6 +10,7 @@
 // Include Headers
 #pragma once
 #include <iostream>
+#include <queue>
 #include <Eigen/Dense>
 #include <dataTypes.hpp>
 
@@ -32,15 +33,15 @@ class looselyCoupledGpsSensor {
             Inputs:
 	        nedTraj: nedTrajSensorSimData_t containing NED truth trajectory
             Outputs:
-                gpsTov: std::vector<int64_t> Vector containing GPS measurement UTC timestamps
-                gpsData: std::vector<Eigen::Vector3d> Vector containing GPS LLA measurements
+                gpsTov: std::queue<int64_t> FIFO queue containing GPS measurement UTC timestamps
+                gpsData: std::queue<Eigen::Vector3d> FIFO queue containing GPS LLA measurements
             Description:
                 Function which takes in the GPS model parameters and trajectory and generates
                 a time history of measurements at the specified rate.
         */
         bool generateGpsMeasurements(nedTrajSensorSimData_t nedTraj,
-			             std::vector<int64_t> gpsTov,
-				     std::vector<Eigen::Vector3d> gpsData);
+			             std::queue<int64_t> gpsTov,
+				     std::queue<Eigen::Vector3d> gpsData);
 
     // Private Class Members/Function
     private:
