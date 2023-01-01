@@ -43,7 +43,7 @@ bool trajectory::parseNedTrajectory(const std::string nedTrajFile) {
 
             // Get Data
             if (temp == 0) {
-                tov = std::stoi(data);
+                tov = (int64_t) std::stod(data);
                 nedTraj_.tov.push_back(tov); 
             } else if (temp == 1) {
                 lat = std::stod(data);

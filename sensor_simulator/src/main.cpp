@@ -75,7 +75,7 @@ class GpsPublisher : public rclcpp::Node {
 	    gpsData_.pop();
 
 	    // Publish Message
-	    std::cout << "[GpsPublisher] Publishing GPS Message: Lat = " << lla[0] << ", Lon = " << lla[1] << ", Alt = " << lla[2] << std::endl;
+	    std::cout << "[GpsPublisher] Publishing GPS Message: tov =  " << message.tov << std::endl;
 	    publisher_->publish(message);
 	}
 
