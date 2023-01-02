@@ -11,7 +11,9 @@
 #pragma once
 #include <iostream>
 #include <queue>
+#include <random>
 #include <Eigen/Dense>
+#include <Rotations.hpp>
 #include <dataTypes.hpp>
 
 // Loosely Coupled GPS Sensor Model Class
@@ -50,5 +52,8 @@ class looselyCoupledGpsSensor {
 	double rate_;
 	double level_pos_sigma_;
 	double vertical_pos_sigma_;
+
+	// NavUtils Rotations
+	Rotations rot_;
         
 };
