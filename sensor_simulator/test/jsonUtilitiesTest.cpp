@@ -24,7 +24,7 @@ TEST(ParseConfig, Master)
     sensorSimData_t config;
 
     // Parse Master Config
-    const std::string fileName = "../test/testData/master_config_test.json";
+    const std::string fileName = "/home/parkerb7/nav_ws/src/sensor-simulator/sensor_simulator/test/testData/sensor_config.json";
 
     // Successfully Parse Sensor Config 
     EXPECT_TRUE(ju.parseSensorConfig(fileName,config));
