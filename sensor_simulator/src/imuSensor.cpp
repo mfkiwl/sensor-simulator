@@ -83,16 +83,13 @@ bool imuSensor::generateImuMeasurements(nedTrajSensorSimData_t nedTraj,
             std::cout << "[imuSensor::generateImuMeasurements] Unable to compute rotation from NED to ECEF from for lower bound" << std::endl;
 	    return false;
 	}
-        int YYYY, MoMo, DD, HH, MM, SS = 0;
-        if (!unixTimestampToDateVec(tovLower, YYYY, MoMo, DD, HH, MM, SS)) {
+	std::vector<double> dateVecLower;
+        if (!unixTimestampToDateVec(tovLower, dateVecLower)) {
             std::cout << "[imuSensor::generateImuMeasurements] Unable to convert timestamp to date vector" << std::endl;
 	    return false;
 	}
-        double Y, Mo, D, H, M, S = 0.0;
-        Y = (double) YYYY; Mo = (double) MoMo; D = (double) DD; H = (double) HH; M = (double) MM; S = (double) SS;
-        std::vector<double> timeVecLower{Y, Mo, D, H, M, S};
         std::string eopPath = "_deps/navfuse-src/test/testData/EOP-Last5Years.csv";
-        if (!rot_.computeREcef2J2k(timeVecLower, eopPath, lowerRE2J)) {
+        if (!rot_.computeREcef2J2k(dateVecLower, eopPath, lowerRE2J)) {
             std::cout << "[imuSensor::generateImuMeasurements] Failed to compute rotation from ECEF to J2K inertial frame" << std::endl;
 	    return false;
 	}	
