@@ -67,15 +67,38 @@ bool imuSensor::generateImuMeasurements(nedTrajSensorSimData_t nedTraj,
 	    idxUpper++;
 	}
 
-	// Get Upper and Lower Index Position/Velocity/Attitude
+	// Get Upper and Lower Index Position/Velocity/Attitude and Time
 	Eigen::Vector3d lowerLla = nedTraj.lla[idxLower];
 	Eigen::Vector3d upperLla = nedTraj.lla[idxUpper];
 	Eigen::Vector3d lowerVelNed = nedTraj.vNed[idxLower];
 	Eigen::Vector3d upperVelNed = nedTraj.vNed[idxUpper];
 	Eigen::Vector3d lowerRph = nedTraj.rph[idxLower];
 	Eigen::Vector3d upperRph = nedTraj.rph[idxUpper];
+	int64_t tovLower = nedTraj.tov[idxLower];
+	int64_t tovUpper = nedTraj.tov[idxUpper];
 
-        // Compute Rotations
+        // Compute Lower Bound Rotations
+	Eigen::Matrix3d lowerRN2E, lowerRE2J = Eigen::Matrix3d::Identity(3,3);
+        if (!rot_.computeRNed2Ecef(lowerLla[0], lowerLla[1], lowerRN2E)) {
+            std::cout << "[imuSensor::generateImuMeasurements] Unable to compute rotation from NED to ECEF from for lower bound" << std::endl;
+	    return false;
+	}
+        int YYYY, MoMo, DD, HH, MM, SS = 0;
+        if (!unixTimestampToDateVec(tovLower, YYYY, MoMo, DD, HH, MM, SS)) {
+            std::cout << "[imuSensor::generateImuMeasurements] Unable to convert timestamp to date vector" << std::endl;
+	    return false;
+	}
+        double Y, Mo, D, H, M, S = 0.0;
+        Y = (double) YYYY; Mo = (double) MoMo; D = (double) DD; H = (double) HH; M = (double) MM; S = (double) SS;
+        std::vector<double> timeVecLower{Y, Mo, D, H, M, S};
+        std::string eopPath = "_deps/navfuse-src/test/testData/EOP-Last5Years.csv";
+        if (!rot_.computeREcef2J2k(timeVecLower, eopPath, lowerRE2J)) {
+            std::cout << "[imuSensor::generateImuMeasurements] Failed to compute rotation from ECEF to J2K inertial frame" << std::endl;
+	    return false;
+	}	
+
+	// Compute Upper Bound Rotations
+	
 
 	// Rotate PVA from NED to J2K Inertial Frame
 
