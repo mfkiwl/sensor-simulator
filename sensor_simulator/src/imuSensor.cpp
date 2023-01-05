@@ -84,7 +84,7 @@ bool imuSensor::generateImuMeasurements(nedTrajSensorSimData_t nedTraj,
 	    return false;
 	}
 	std::vector<double> dateVecLower;
-        if (!unixTimestampToDateVec(tovLower, dateVecLower)) {
+        if (!rot_.unixTimestampToDateVec(tovLower, dateVecLower)) {
             std::cout << "[imuSensor::generateImuMeasurements] Unable to convert timestamp to date vector" << std::endl;
 	    return false;
 	}
