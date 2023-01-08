@@ -95,9 +95,35 @@ bool imuSensor::generateImuMeasurements(nedTrajSensorSimData_t nedTraj,
 	}	
 
 	// Compute Upper Bound Rotations
-	
+        Eigen::Matrix3d upperRN2E, upperRE2J = Eigen::Matrix3d::Identity(3,3);
+        if (!rot_.computeRNed2Ecef(upperLla[0], upperLla[1], upperRN2E)) {
+            std::cout << "[imuSensor::generateImuMeasurements] Unable to compute rotation from NED to ECEF from for lower bound" << std::endl;
+            return false;
+        }
+        std::vector<double> dateVecUpper;
+        if (!rot_.unixTimestampToDateVec(tovUpper, dateVecUpper)) {
+            std::cout << "[imuSensor::generateImuMeasurements] Unable to convert timestamp to date vector" << std::endl;
+            return false;
+        }
+        if (!rot_.computeREcef2J2k(dateVecUpper, eopPath, upperRE2J)) {
+            std::cout << "[imuSensor::generateImuMeasurements] Failed to compute rotation from ECEF to J2K inertial frame" << std::endl;
+            return false;
+        }	
 
-	// Rotate PVA from NED to J2K Inertial Frame
+	// Rotate Lower PVA from NED to J2K Inertial Frame
+        Eigen::Vector3d rELower, rJLower, vELower, vJLower;
+        if (!rot_.lla2Ecef(lowerLla[0], lowerLla[1], lowerLla[2], rELower)) {
+            std::cout << "[imuSensor::generateImuMeasurements] Failed to compute ECEF position" << std::endl;
+            return false;
+	}
+
+
+	// Rotate Upper PVA from NED to J2K Inertial Frame
+	Eigen::Vector3d rEUpper, rJUpper, vEUpper, vJUpper;
+        if (!rot_.lla2Ecef(upperLla[0], upperLla[1], upperLla[2], rEUpper)) {
+            std::cout << "[imuSensor::generateImuMeasurements] Failed to compute ECEF position" << std::endl;
+            return false;
+        }
 
         // Interpolate Inertial Frame Data
 	
