@@ -110,24 +110,33 @@ bool imuSensor::generateImuMeasurements(nedTrajSensorSimData_t nedTraj,
             return false;
         }	
 
-	// Rotate Lower PVA from NED to J2K Inertial Frame
-        Eigen::Vector3d rELower, rJLower, vELower, vJLower;
+	// Define Rotation Rate of ECEF Frame wrt Inertial Frame
+	Eigen::Matrix3d wE2I(3);
+	wE2I <<             0,  -0.00007292115, 0,
+	        0.00007292115,               0, 0,
+		            0,               0, 0;
+
+	// Rotate Lower Velocity from NED to J2K Inertial Frame
+        Eigen::Vector3d rELower, vJLower;
         if (!rot_.lla2Ecef(lowerLla[0], lowerLla[1], lowerLla[2], rELower)) {
             std::cout << "[imuSensor::generateImuMeasurements] Failed to compute ECEF position" << std::endl;
             return false;
 	}
-
+	vJLower = (lowerRE2J * lowerRN2E * lowerVelNed) + (lowerRE2J * wE2I * rELower);
+	// RPH -> qB2I Here...
 
 	// Rotate Upper PVA from NED to J2K Inertial Frame
-	Eigen::Vector3d rEUpper, rJUpper, vEUpper, vJUpper;
+	Eigen::Vector3d rEUpper, vJUpper;
         if (!rot_.lla2Ecef(upperLla[0], upperLla[1], upperLla[2], rEUpper)) {
             std::cout << "[imuSensor::generateImuMeasurements] Failed to compute ECEF position" << std::endl;
             return false;
         }
-
-        // Interpolate Inertial Frame Data
+	vJUpper = (upperRE2J * upperRN2E * upperVelNed) + (upperRE2J * wE2I * rEUpper);
+	// RPH -> qB2I Here...
 	
-	// Compute Gravity
+	// Compute NED Gravity
+	
+	// Rotate NED Gravity to Inertial Frame
 	
 	// Compute Truth Delta Velocity and Delta Thetas
 	
