@@ -109,13 +109,13 @@ bool imuSensor::generateImuMeasurements(nedTrajSensorSimData_t nedTraj,
             std::cout << "[imuSensor::generateImuMeasurements] Failed to compute rotation from ECEF to J2K inertial frame" << std::endl;
             return false;
         }	
-
+        
 	// Define Rotation Rate of ECEF Frame wrt Inertial Frame
-	Eigen::Matrix3d wE2I(3);
+	Eigen::Matrix3d wE2I;
 	wE2I <<             0,  -0.00007292115, 0,
 	        0.00007292115,               0, 0,
 		            0,               0, 0;
-
+        
 	// Rotate Lower Velocity from NED to J2K Inertial Frame
         Eigen::Vector3d rELower, vJLower;
         if (!rot_.lla2Ecef(lowerLla[0], lowerLla[1], lowerLla[2], rELower)) {
@@ -133,7 +133,7 @@ bool imuSensor::generateImuMeasurements(nedTrajSensorSimData_t nedTraj,
         }
 	vJUpper = (upperRE2J * upperRN2E * upperVelNed) + (upperRE2J * wE2I * rEUpper);
 	// RPH -> qB2I Here...
-	
+
 	// Compute NED Gravity
 	
 	// Rotate NED Gravity to Inertial Frame
