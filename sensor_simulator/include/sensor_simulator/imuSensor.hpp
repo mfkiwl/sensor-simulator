@@ -62,11 +62,6 @@ class imuSensor {
 	double gyro_mis_sigma_urad_;
 	double gyro_arw_deg_sqrtHr_;
 
-	// IMU Measurement Generation Values
-	Eigen::Vector3d vIPrev_, vICurr_;
-	Eigen::Vector3d gI_;
-	Eigen::Vector4d qB2IPrev_, qB2ICurr_;
-
 	// NavUtils Objects
 	Rotations rot_;
 	Attitude att_;
