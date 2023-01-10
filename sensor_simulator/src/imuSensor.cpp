@@ -124,7 +124,7 @@ bool imuSensor::generateImuMeasurements(nedTrajSensorSimData_t nedTraj,
 	}
 	vJLower = (lowerRE2J * lowerRN2E * lowerVelNed) + (lowerRE2J * wE2I * rELower);
 
-	// Rotate Upper PVA from NED to J2K Inertial Frame
+	// Rotate Upper Velocity from NED to J2K Inertial Frame
 	Eigen::Vector3d rEUpper, vJUpper;
         if (!rot_.lla2Ecef(upperLla[0], upperLla[1], upperLla[2], rEUpper)) {
             std::cout << "[imuSensor::generateImuMeasurements] Failed to compute ECEF position" << std::endl;
@@ -148,7 +148,7 @@ bool imuSensor::generateImuMeasurements(nedTrajSensorSimData_t nedTraj,
         }
 	
 	// Rotate NED Gravity to Inertial Frame
-	Eigen::Vector3d gI = ((upperRE2J * upperRN2E * gNUpper) + (lowerRE2J * lowerRN2E * gNLower)) / 2.0;
+	Eigen::Vector3d gJ = ((upperRE2J * upperRN2E * gNUpper) + (lowerRE2J * lowerRN2E * gNLower)) / 2.0;
 
 	// ToDo: Compute Delta Orientation over Interval
 	
