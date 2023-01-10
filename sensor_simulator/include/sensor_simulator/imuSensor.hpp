@@ -15,6 +15,7 @@
 #include <Eigen/Dense>
 #include <Rotations.hpp>
 #include <Attitude.hpp>
+#include <Gravity.hpp>
 #include <dataTypes.hpp>
 
 // IMU Sensor Model Class
@@ -63,11 +64,12 @@ class imuSensor {
 
 	// IMU Measurement Generation Values
 	Eigen::Vector3d vIPrev_, vICurr_;
-	Eigen::Vector3d gIPrev_, gICurr_;
+	Eigen::Vector3d gI_;
 	Eigen::Vector4d qB2IPrev_, qB2ICurr_;
 
 	// NavUtils Objects
 	Rotations rot_;
 	Attitude att_;
+	Gravity grav_;
         
 };

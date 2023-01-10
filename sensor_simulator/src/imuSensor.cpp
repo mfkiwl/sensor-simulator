@@ -123,7 +123,6 @@ bool imuSensor::generateImuMeasurements(nedTrajSensorSimData_t nedTraj,
             return false;
 	}
 	vJLower = (lowerRE2J * lowerRN2E * lowerVelNed) + (lowerRE2J * wE2I * rELower);
-	// RPH -> qB2I Here...
 
 	// Rotate Upper PVA from NED to J2K Inertial Frame
 	Eigen::Vector3d rEUpper, vJUpper;
@@ -132,11 +131,26 @@ bool imuSensor::generateImuMeasurements(nedTrajSensorSimData_t nedTraj,
             return false;
         }
 	vJUpper = (upperRE2J * upperRN2E * upperVelNed) + (upperRE2J * wE2I * rEUpper);
-	// RPH -> qB2I Here...
+
+	// Compute Constant dV over Interval - Constant Acceleration across Interval
+	double intervalRatio = (double) dt / (tovUpper - tovLower);
+	Eigen::Vector3d dVJConst = (vJUpper - vJLower) * intervalRatio;
 
 	// Compute NED Gravity
+	Eigen::Vector3d gNLower, gNUpper;
+	if (!grav_.gravityNed(lowerLla[0], lowerLla[2], gNLower)) {
+            std::cout << "[imuSensor::generateImuMeasurements] Failed to compute NED Gravity" << std::endl;
+            return false;
+	}
+	if (!grav_.gravityNed(upperLla[0], upperLla[2], gNUpper)) {
+            std::cout << "[imuSensor::generateImuMeasurements] Failed to compute NED Gravity" << std::endl;
+            return false;
+        }
 	
 	// Rotate NED Gravity to Inertial Frame
+	Eigen::Vector3d gI = ((upperRE2J * upperRN2E * gNUpper) + (lowerRE2J * lowerRN2E * gNLower)) / 2.0;
+
+	// ToDo: Compute Delta Orientation over Interval
 	
 	// Compute Truth Delta Velocity and Delta Thetas
 	
