@@ -77,6 +77,35 @@ bool imuSensor::generateImuMeasurements(nedTrajSensorSimData_t nedTraj,
 	int64_t tovLower = nedTraj.tov[idxLower];
 	int64_t tovUpper = nedTraj.tov[idxUpper];
 
+	// Compute Lower Bound Body Frame Attitude
+	Eigen::Matrix3d lowerRB2N = Eigen::Matrix3d::Identity(3,3);
+	if (!att_.euler2Dcm(lowerRph, lowerRB2N)) {
+	    std::cout << "[imuSensor::generateImuMeasurements] Unable to compute body frame attitude for lower bound" << std::endl;
+            return false;
+	}
+	
+	// Compute Upper Bound Body Frame Attitude 
+	Eigen::Matrix3d upperRB2N = Eigen::Matrix3d::Identity(3,3);
+        if (!att_.euler2Dcm(upperRph, upperRB2N)) {
+            std::cout << "[imuSensor::generateImuMeasurements] Unable to compute body frame attitude for upper bound" << std::endl;
+            return false;
+        }
+
+	// Compute Delta Attitude Rotation Across Interval
+	Eigen::Matrix3d RBlower2BUpper = upperRB2N.transpose() * lowerRB2N;
+
+	// Compute Delta Theta Truth
+	Eigen::VectorXd qBLower2BUpper(4);
+	if (!att_.(computeQuaternionFromDcm(RBLower2BUpper, qBLower2BUpper))) {
+            Eigen::Matrix3d lowerRB2N = Eigen::Matrix3d::Identity(3,3);
+	    std::cout << "[imuSensor::generateImuMeasurements] Unable to compute attitude quaternion from DCM" << std::endl;
+            return false;
+	}
+	Eigen::Vector3d dThetaTruth = Eigen::Vector3d::Zeros(3);
+	// Convert Quaternion to Rotation Vector...
+	double intervalRatio = (double) dt / (tovUpper - tovLower);
+	dThetaTruth *= intervalRatio;
+
         // Compute Lower Bound Rotations
 	Eigen::Matrix3d lowerRN2E, lowerRE2J = Eigen::Matrix3d::Identity(3,3);
         if (!rot_.computeRNed2Ecef(lowerLla[0], lowerLla[1], lowerRN2E)) {
@@ -133,7 +162,6 @@ bool imuSensor::generateImuMeasurements(nedTrajSensorSimData_t nedTraj,
 	vJUpper = (upperRE2J * upperRN2E * upperVelNed) + (upperRE2J * wE2I * rEUpper);
 
 	// Compute Constant dV over Interval - Constant Acceleration across Interval
-	double intervalRatio = (double) dt / (tovUpper - tovLower);
 	Eigen::Vector3d dVJConst = (vJUpper - vJLower) * intervalRatio;
 
 	// Compute NED Gravity
@@ -149,8 +177,6 @@ bool imuSensor::generateImuMeasurements(nedTrajSensorSimData_t nedTraj,
 	
 	// Rotate NED Gravity to Inertial Frame
 	Eigen::Vector3d gJ = ((upperRE2J * upperRN2E * gNUpper) + (lowerRE2J * lowerRN2E * gNLower)) / 2.0;
-
-	// ToDo: Compute Delta Orientation over Interval
 	
 	// Compute Truth Delta Velocity and Delta Thetas
 	
