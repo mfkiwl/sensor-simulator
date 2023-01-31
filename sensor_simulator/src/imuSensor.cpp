@@ -92,17 +92,20 @@ bool imuSensor::generateImuMeasurements(nedTrajSensorSimData_t nedTraj,
         }
 
 	// Compute Delta Attitude Rotation Across Interval
-	Eigen::Matrix3d RBlower2BUpper = upperRB2N.transpose() * lowerRB2N;
+	Eigen::MatrixXd RBLower2BUpper = upperRB2N.transpose() * lowerRB2N;
 
 	// Compute Delta Theta Truth
 	Eigen::VectorXd qBLower2BUpper(4);
-	if (!att_.(computeQuaternionFromDcm(RBLower2BUpper, qBLower2BUpper))) {
+	if (!att_.computeQuaternionFromDcm(RBLower2BUpper, qBLower2BUpper)) {
             Eigen::Matrix3d lowerRB2N = Eigen::Matrix3d::Identity(3,3);
 	    std::cout << "[imuSensor::generateImuMeasurements] Unable to compute attitude quaternion from DCM" << std::endl;
             return false;
 	}
-	Eigen::Vector3d dThetaTruth = Eigen::Vector3d::Zeros(3);
-	// Convert Quaternion to Rotation Vector...
+	Eigen::VectorXd dThetaTruth(3);
+	if (!att_.computeRotationVecFromQuaternion(qBLower2BUpper, dThetaTruth)) {
+            std::cout << "[imuSensor::generateImuMeasurements] Unable to compute rotation vector from quaternion" << std::endl;
+            return false;
+        }
 	double intervalRatio = (double) dt / (tovUpper - tovLower);
 	dThetaTruth *= intervalRatio;
 
